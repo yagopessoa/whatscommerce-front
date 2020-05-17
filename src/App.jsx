@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-// import store from './store';
 import configureStore from './store';
 import Routes from './routes';
 

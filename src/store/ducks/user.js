@@ -3,8 +3,9 @@ import { createActions, createReducer } from 'reduxsauce';
 /**
  * Action types & creators
  */
-export const { Types, Creators: UserActions } = createActions({
-  login: ['email', 'name'],
+export const { Types: UserTypes, Creators: UserActions } = createActions({
+  login: ['email', 'password'],
+  updateUser: ['email', 'name'],
   logout: [],
 });
 
@@ -13,7 +14,9 @@ export const { Types, Creators: UserActions } = createActions({
  */
 const INITIAL_STATE = { email: null, name: null };
 
-const login = (_, { email, name }) => ({ email, name });
+const login = (_, { email, password }) => ({ email, password });
+
+const updateUser = (_, { email, name }) => ({ email, name });
 
 const logout = () => ({ email: null, name: null });
 
@@ -21,6 +24,7 @@ const logout = () => ({ email: null, name: null });
  * Reducer
  */
 export default createReducer(INITIAL_STATE, {
-  [Types.LOGIN]: login,
-  [Types.LOGOUT]: logout,
+  [UserTypes.LOGIN]: login,
+  [UserTypes.UPDATE_USER]: updateUser,
+  [UserTypes.LOGOUT]: logout,
 });
