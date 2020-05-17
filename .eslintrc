@@ -1,0 +1,6 @@
+{
+  "extends": "liber",
+  "rules": {
+    "react/jsx-props-no-spreading": "off"
+  }
+}
