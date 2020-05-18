@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { history } from './store';
+import { AuthActions } from './store/ducks/authorization';
 import LoginPage from './pages/Login/LoginPage';
 import AdminHomePage from './pages/AdminHome/AdminHomePage';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { name, email } = useSelector(({ user: { name, email } }) => ({ name, email }));
+  const { uid, accessToken, client } = useSelector(({ authorization }) => authorization);
+  const isAuthenticated = () => Boolean(uid && accessToken && client);
 
-  const isAuthenticated = () => Boolean(name && email); // TODO: check cookie for this
+  const dispatch = useDispatch();
+  const { checkAuth } = AuthActions;
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      dispatch(checkAuth());
+    }
+  }, []);
 
   return (
     <Route
