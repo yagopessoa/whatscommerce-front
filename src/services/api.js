@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { LOGIN_URL, VALIDATE_TOKEN_URL, LOGOUT_URL } from '../constants';
+import { LOGIN_URL, SIGNUP_URL, VALIDATE_TOKEN_URL, LOGOUT_URL } from '../constants';
 import { store } from '../App';
 
 const instance = axios.create({
@@ -35,7 +35,13 @@ instance.interceptors.response.use(
   error => {
     const errors = error?.response?.data?.errors ?? [];
 
-    if (errors.length > 0) {
+    // console.log('error object ->\n', error?.response?.data);
+
+    const { full_messages } = errors;
+
+    if (full_messages) {
+      console.log(`%c ${full_messages[0]}`, 'color: red; font-weight: bold');
+    } else if (errors.length > 0) {
       errors.forEach(error => console.log(`%c ${error}`, 'color: red; font-weight: bold'));
     }
 
@@ -44,8 +50,14 @@ instance.interceptors.response.use(
   },
 );
 
-export const userLogin = ({ email, password }) => instance.post(LOGIN_URL, { email, password });
+export const userLogin = credentials => instance.post(LOGIN_URL, { ...credentials });
+
+export const userSignup = ({ passwordConfirmation: password_confirmation, ...rest }) => {
+  return instance.post(SIGNUP_URL, { password_confirmation, ...rest });
+};
+
 export const checkAuth = () => instance.get(VALIDATE_TOKEN_URL);
+
 export const userLogout = () => instance.delete(LOGOUT_URL);
 
 export default { userLogin, checkAuth };

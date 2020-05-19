@@ -6,7 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { history } from './store';
 import { AuthActions } from './store/ducks/authorization';
 import LoginPage from './pages/Login/LoginPage';
+import SignupPage from './pages/Signup/SignupPage';
 import AdminHomePage from './pages/AdminHome/AdminHomePage';
+import { ADMINISTRATIVE_PATH, SIGNUP_PATH } from './constants';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const { uid, accessToken, client } = useSelector(({ authorization }) => authorization);
@@ -39,7 +41,8 @@ const Routes = () => (
   <ConnectedRouter history={history}>
     <Switch>
       <Route exact path="/" component={() => <LoginPage />} />
-      <PrivateRoute path="/administrative" component={() => <AdminHomePage />} />
+      <Route path={SIGNUP_PATH} component={() => <SignupPage />} />
+      <PrivateRoute path={ADMINISTRATIVE_PATH} component={() => <AdminHomePage />} />
     </Switch>
   </ConnectedRouter>
 );

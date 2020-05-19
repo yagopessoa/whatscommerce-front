@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import { useLocation, Link } from 'react-router-dom';
 
 import { UserActions } from '../../store/ducks/user';
-import { APP_NAME } from '../../constants';
+import { APP_NAME, ADMINISTRATIVE_PATH, SIGNUP_PATH } from '../../constants';
 import { Container, MiddleContainer } from './LoginPage.styles';
 
 const LoginPage = () => {
-  const [showForm, setShowForm] = useState(false);
+  const location = useLocation();
+
+  const [showForm, setShowForm] = useState(location?.state?.loginForm ?? false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,7 +22,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      dispatch(push('/administrative'));
+      dispatch(push(ADMINISTRATIVE_PATH));
     }
   }, []);
 
@@ -50,10 +53,10 @@ const LoginPage = () => {
       <button type="button" onClick={() => setShowForm(true)}>
         Fazer login
       </button>
-      {/* <br />
-      <button type="button" disabled onClick={() => {}}>
+      <br />
+      <button type="button" onClick={() => dispatch(push(SIGNUP_PATH))}>
         Criar uma conta
-      </button> */}
+      </button>
     </MiddleContainer>
   );
 
@@ -62,10 +65,16 @@ const LoginPage = () => {
       <b>Faça login na sua lojinha</b>
       <br />
       <br />
-      <input type="text" value={email} onChange={({ target: { value } }) => setEmail(value)} />
+      <input
+        type="text"
+        placeholder="E-mail"
+        value={email}
+        onChange={({ target: { value } }) => setEmail(value)}
+      />
       <br />
       <input
         type="password"
+        placeholder="Senha"
         value={password}
         onChange={({ target: { value } }) => setPassword(value)}
       />
@@ -74,6 +83,9 @@ const LoginPage = () => {
       <button type="button" onClick={handleLogin}>
         Entrar
       </button>
+      <br />
+      <br />
+      <Link to={SIGNUP_PATH}>Não tenho uma conta</Link>
     </MiddleContainer>
   );
 

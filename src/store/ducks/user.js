@@ -5,6 +5,7 @@ import { createActions, createReducer } from 'reduxsauce';
  */
 export const { Types: UserTypes, Creators: UserActions } = createActions({
   login: ['email', 'password'],
+  signup: ['name', 'email', 'password', 'passwordConfirmation'],
   updateUser: ['email', 'name'],
   logout: [],
 });
@@ -14,17 +15,11 @@ export const { Types: UserTypes, Creators: UserActions } = createActions({
  */
 const INITIAL_STATE = { email: null, name: null };
 
-const login = (_, { email, password }) => ({ email, password });
-
-const updateUser = (_, { email, name }) => ({ email, name });
-
-const logout = () => ({ email: null, name: null });
+const updateUser = (state, { email, name }) => ({ ...state, email, name });
 
 /**
  * Reducer
  */
 export default createReducer(INITIAL_STATE, {
-  [UserTypes.LOGIN]: login,
   [UserTypes.UPDATE_USER]: updateUser,
-  [UserTypes.LOGOUT]: logout,
 });
