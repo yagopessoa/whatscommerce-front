@@ -1,13 +1,16 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { userLogin, userSignup, checkAuth, userLogout } from '../services/api';
+import { convertToCamelCase } from '../utils';
+import { ADMINISTRATIVE_PATH } from '../constants';
+import { userLogin, userSignup, checkAuth, userLogout, getCompany } from '../services/api';
 import { UserTypes } from './ducks/user';
 import { AuthTypes } from './ducks/authorization';
-import { ADMINISTRATIVE_PATH } from '../constants';
+import { CompanyTypes } from './ducks/company';
 
 const { LOGIN, SIGNUP, UPDATE_USER, LOGOUT } = UserTypes;
 const { CHECK_AUTH, UPDATE_AUTH, CLEAR_AUTH } = AuthTypes;
+const { GET_COMPANY, UPDATE_COMPANY, CLEAR_COMPANY } = CompanyTypes;
 
 function* requestLogin(payload) {
   const response = yield call(userLogin, payload);
@@ -68,8 +71,13 @@ function* validateToken() {
       });
     } else {
       yield put({ type: CLEAR_AUTH });
+      yield put({ type: CLEAR_COMPANY });
       yield put(push('/'));
     }
+  } else {
+    yield put({ type: CLEAR_AUTH });
+    yield put({ type: CLEAR_COMPANY });
+    yield put(push('/'));
   }
 }
 
@@ -78,8 +86,23 @@ function* requestLogout() {
 
   yield put({ type: UPDATE_USER, email: null, name: null });
   yield put({ type: CLEAR_AUTH });
+  yield put({ type: CLEAR_COMPANY });
 
   yield put(push('/'));
+}
+
+function* requestGetCompany() {
+  const response = yield call(getCompany);
+
+  if (response?.status) {
+    const {
+      data: companyInfo,
+      headers: { 'token-type': tokenType, 'access-token': accessToken, client, uid },
+    } = response;
+
+    yield put({ type: UPDATE_COMPANY, ...convertToCamelCase(companyInfo) });
+    yield put({ type: UPDATE_AUTH, tokenType, accessToken, client, uid });
+  }
 }
 
 export default function* root() {
@@ -87,4 +110,5 @@ export default function* root() {
   yield takeLatest(SIGNUP, requestSignup);
   yield takeLatest(CHECK_AUTH, validateToken);
   yield takeLatest(LOGOUT, requestLogout);
+  yield takeLatest(GET_COMPANY, requestGetCompany);
 }

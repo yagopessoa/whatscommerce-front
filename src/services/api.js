@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-import { LOGIN_URL, SIGNUP_URL, VALIDATE_TOKEN_URL, LOGOUT_URL } from '../constants';
+import {
+  LOGIN_URL,
+  SIGNUP_URL,
+  VALIDATE_TOKEN_URL,
+  LOGOUT_URL,
+  SHOW_COMPANY_URL,
+} from '../constants';
 import { store } from '../App';
 
 const instance = axios.create({
@@ -44,6 +50,7 @@ instance.interceptors.response.use(
     } else if (errors.length > 0) {
       errors.forEach(error => console.log(`%c ${error}`, 'color: red; font-weight: bold'));
     }
+    // TODO: set above message in store to show an error alert/toast
 
     // return Promise.reject(error);
     // return { status: false }; // some custom response?
@@ -60,4 +67,6 @@ export const checkAuth = () => instance.get(VALIDATE_TOKEN_URL);
 
 export const userLogout = () => instance.delete(LOGOUT_URL);
 
-export default { userLogin, checkAuth };
+export const getCompany = () => instance.get(SHOW_COMPANY_URL);
+
+export default { userLogin, userSignup, checkAuth, userLogout, getCompany };
