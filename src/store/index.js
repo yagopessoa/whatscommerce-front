@@ -1,5 +1,6 @@
 import { createBrowserHistory } from 'history';
 import { applyMiddleware, compose, createStore } from 'redux';
+import { createLogger } from 'redux-logger';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import reduxCookiesMiddleware, { getStateFromCookies } from 'redux-cookies-middleware';
@@ -29,6 +30,7 @@ export default function configureStore(preloadedState) {
     { ...initialState, ...preloadedState },
     compose(
       applyMiddleware(
+        createLogger(),
         routerMiddleware(history), // for dispatching history actions
         sagaMiddleware,
         reduxCookiesMiddleware(COOKIES_PATHS),

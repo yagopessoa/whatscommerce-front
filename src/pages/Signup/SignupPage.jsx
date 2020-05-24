@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { UserActions } from '../../store/ducks/user';
 import { ADMINISTRATIVE_PATH } from '../../constants';
-import { Container, MiddleContainer, Caption } from './SignupPage.styles';
+import { Container, MiddleContainer, Caption } from '../../components/CommonStyles/CommonStyles';
 
 const SignupPage = () => {
   const [name, setName] = useState('');
@@ -71,7 +71,6 @@ const SignupPage = () => {
           value={passwordConfirmation}
           onChange={({ target: { value } }) => setPasswordConfirmation(value)}
         />
-        <br />
         <Caption>Sua senha deve conter pelo menos 6 dígitos</Caption>
         <br />
         <br />

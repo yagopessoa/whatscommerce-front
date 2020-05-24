@@ -1,16 +1,31 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 import { convertToCamelCase } from '../utils';
 import { ADMINISTRATIVE_PATH } from '../constants';
-import { userLogin, userSignup, checkAuth, userLogout, getCompany } from '../services/api';
+import {
+  userLogin,
+  userSignup,
+  checkAuth,
+  userLogout,
+  getCompany,
+  saveCompany,
+} from '../services/api';
 import { UserTypes } from './ducks/user';
 import { AuthTypes } from './ducks/authorization';
 import { CompanyTypes } from './ducks/company';
 
 const { LOGIN, SIGNUP, UPDATE_USER, LOGOUT } = UserTypes;
 const { CHECK_AUTH, UPDATE_AUTH, CLEAR_AUTH } = AuthTypes;
-const { GET_COMPANY, UPDATE_COMPANY, CLEAR_COMPANY } = CompanyTypes;
+const {
+  GET_COMPANY,
+  UPDATE_COMPANY,
+  CLEAR_COMPANY,
+  SAVE_COMPANY,
+  SAVE_SOCIAL_MEDIA,
+} = CompanyTypes;
+
+const getStoredCompany = ({ company }) => company;
 
 function* requestLogin(payload) {
   const response = yield call(userLogin, payload);
@@ -105,10 +120,29 @@ function* requestGetCompany() {
   }
 }
 
+function* requestCreateCompany(payload) {
+  const { name: companyName } = yield select(getStoredCompany);
+  const companyExists = Boolean(companyName);
+
+  const response = yield call(saveCompany, payload, companyExists);
+
+  if (response?.status) {
+    const {
+      data: companyInfo,
+      headers: { 'token-type': tokenType, 'access-token': accessToken, client, uid },
+    } = response;
+
+    yield put({ type: UPDATE_COMPANY, ...convertToCamelCase(companyInfo) });
+    yield put({ type: UPDATE_AUTH, tokenType, accessToken, client, uid });
+  }
+}
+
 export default function* root() {
   yield takeLatest(LOGIN, requestLogin);
   yield takeLatest(SIGNUP, requestSignup);
   yield takeLatest(CHECK_AUTH, validateToken);
   yield takeLatest(LOGOUT, requestLogout);
   yield takeLatest(GET_COMPANY, requestGetCompany);
+  yield takeLatest(SAVE_COMPANY, requestCreateCompany);
+  yield takeLatest(SAVE_SOCIAL_MEDIA, requestCreateCompany);
 }

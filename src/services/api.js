@@ -6,6 +6,7 @@ import {
   VALIDATE_TOKEN_URL,
   LOGOUT_URL,
   SHOW_COMPANY_URL,
+  COMPANIES_URL,
 } from '../constants';
 import { store } from '../App';
 
@@ -69,4 +70,29 @@ export const userLogout = () => instance.delete(LOGOUT_URL);
 
 export const getCompany = () => instance.get(SHOW_COMPANY_URL);
 
-export default { userLogin, userSignup, checkAuth, userLogout, getCompany };
+export const saveCompany = (
+  {
+    name,
+    instagramUrl: instagram_url,
+    whatsappNumber: whatsapp_number,
+    facebookUrl: facebook_url,
+    pageUrl: page_url,
+    // openingHours: opening_hours, // TODO: figure out how to save this
+  },
+  isUpdating = false,
+) => {
+  const params = {
+    name,
+    whatsapp_number,
+    instagram_url,
+    facebook_url,
+    page_url,
+    // opening_hours,
+  };
+  if (isUpdating) {
+    return instance.put(SHOW_COMPANY_URL, params);
+  }
+  return instance.post(COMPANIES_URL, params);
+};
+
+export default { userLogin, userSignup, checkAuth, userLogout, getCompany, saveCompany };

@@ -5,7 +5,8 @@ import { useLocation, Link } from 'react-router-dom';
 
 import { UserActions } from '../../store/ducks/user';
 import { APP_NAME, ADMINISTRATIVE_PATH, SIGNUP_PATH } from '../../constants';
-import { Container, MiddleContainer } from './LoginPage.styles';
+import { ImagePlaceholder } from './LoginPage.styles';
+import { MiddleContainer, Container } from '../../components/CommonStyles/CommonStyles';
 
 const LoginPage = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const LoginPage = () => {
 
   const renderIntro = () => (
     <MiddleContainer>
+      <ImagePlaceholder />
       <b>Nós somos a {APP_NAME}</b>
       <br />
       <br />
@@ -70,6 +72,7 @@ const LoginPage = () => {
         placeholder="E-mail"
         value={email}
         onChange={({ target: { value } }) => setEmail(value)}
+        autoFocus
       />
       <br />
       <input

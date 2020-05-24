@@ -14,6 +14,8 @@ export const { Types: CompanyTypes, Creators: CompanyActions } = createActions({
     'updatedAt',
   ],
   clearCompany: [],
+  saveCompany: ['name', 'whatsappNumber', 'pageUrl'],
+  saveSocialMedia: ['instagramUrl', 'facebookUrl'],
 });
 
 const INITIAL_STATE = {
