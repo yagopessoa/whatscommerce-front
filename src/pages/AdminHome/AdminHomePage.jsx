@@ -16,10 +16,10 @@ const AdminHomePage = () => {
     uid,
     client,
     companyName,
-    logo,
+    // logo,
     instagramUrl,
     facebookUrl,
-    openingHours,
+    // openingHours,
     whatsappNumber,
     pageUrl,
   } = useSelector(({ user, authorization, company: { name: companyName, ...companyInfo } }) => ({
@@ -60,10 +60,10 @@ const AdminHomePage = () => {
       Nome: {companyName} <br />
       Whatsapp: {whatsappNumber} <br />
       URL da página: {pageUrl} <br />
-      Logo: {logo} <br />
+      {/* Logo: {logo} <br /> */}
       Insta: {instagramUrl} <br />
       Face: {facebookUrl} <br />
-      Horário de funcionamento: {openingHours} <br />
+      {/* Horário de funcionamento: {openingHours} <br /> */}
       <br />
       <button type="button" onClick={() => dispatch(push(COMPANY_EDIT_PATH))}>
         Editar

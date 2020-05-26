@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Greeting tests should render correctly 1`] = `
+<div>
+  <div
+    class="sc-AxirZ hOjuvP"
+  >
+    <div
+      class="sc-Axmtr iVYyva"
+    >
+      <div
+        class="sc-AxmLO kXDhGw"
+      >
+        <b
+          data-testid="hello-msg"
+        >
+          Bem-vindo(a), 
+          UserMockedName
+        </b>
+        <br />
+        <br />
+        Agora é hora de prepararmos sua lojinha para seus clientes, vamos lá?
+        <br />
+        <br />
+        <button
+          data-testid="create-store-btn"
+          type="button"
+        >
+          Criar minha lojinha
+        </button>
+      </div>
+    </div>
+    <br />
+    <br />
+    <button
+      type="button"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+`;

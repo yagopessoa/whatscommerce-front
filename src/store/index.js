@@ -24,8 +24,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 const initialState = getStateFromCookies(INITIAL_STATE, COOKIES_PATHS);
 
-export default function configureStore(preloadedState) {
-  const store = createStore(
+const getStoreWithMiddleware = () =>
+  createStore(
     createRootReducer(history), // root reducer with router state
     { ...initialState, ...preloadedState },
     compose(
@@ -39,7 +39,15 @@ export default function configureStore(preloadedState) {
     ),
   );
 
-  sagaMiddleware.run(rootSaga);
+export default function configureStore(preloadedState) {
+  let store;
+
+  if (process.env.NODE_ENV !== 'test') {
+    store = getStoreWithMiddleware();
+    sagaMiddleware.run(rootSaga);
+  } else {
+    store = createStore(createRootReducer(), { ...preloadedState });
+  }
 
   return store;
 }
